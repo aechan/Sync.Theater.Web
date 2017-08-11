@@ -2,3 +2,6 @@
 dist
 bower_components
 node_modules
+src/jsm/
+src/cssm/
+src/index.min.html

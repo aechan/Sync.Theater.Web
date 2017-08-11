@@ -1,59 +1,139 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="description" content="Milligram provides a minimal setup of styles for a fast and clean starting point. Specially designed for better performance and higher productivity with fewer properties to reset resulting in cleaner code.">
-		<title>Milligram | A minimalist CSS framework.</title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="description" content="Watch movies and videos in real-time with friends!" />
+		<title>sync.theater</title>
 		<link rel="icon" href="images/favicon.ico">
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
-		<link rel="stylesheet" href="lib/normalize.css/normalize.css">
-		<link rel="stylesheet" href="lib/milligram/dist/milligram.min.css">
-		<link rel="stylesheet" href="styles/main.css">
+		<link href="https://fonts.googleapis.com/css?family=Raleway:300" rel="stylesheet" />
+		<link rel="stylesheet" href="lib/normalize.css/normalize.css" />
+		<link rel="stylesheet" href="lib/milligram/dist/milligram.min.css" />
+		<link rel="stylesheet" href="cssm/main.min.css" />
+		<link rel="stylesheet" href="cssm/video-js.min.css" />
+		<link rel="stylesheet" href="cssm/sync-theater.min.css" />
+		<script src="https://use.fontawesome.com/d244c2f21f.js"></script>
+		
 	</head>
 	<body>
 
 		<main class="wrapper">
 
-			<header class="container" id="home">
-				<a href="http://milligram.github.io" title="Milligram | A minimalist CSS framework." target="_blank"><img class="thumbnail" src="https://milligram.github.io/images/thumbnail.png" alt="Milligram | A minimalist CSS framework."></a>
-			</header>
+			<div id="home">
+				<div id="centered-content" class="center right-align">
+					<h1 id="title">sync.theater</h1>
+					<div class="row row-top">
 
-			<section class="container" id="examples">
-				<h5 class="title">Examples</h5>
-				<p>You can view more examples of using Milligram.</p>
-				<p>
-					<ul>
-						<li><a href="https://milligram.github.io/#getting-started" title="Getting Started">Getting Started</a></li>
-						<li><a href="https://milligram.github.io/#typography" title="Typography">Typography</a></li>
-						<li><a href="https://milligram.github.io/#blockquotes" title="Blockquotes">Blockquotes</a></li>
-						<li><a href="https://milligram.github.io/#buttons" title="Buttons">Buttons</a></li>
-						<li><a href="https://milligram.github.io/#lists" title="Lists">Lists</a></li>
-						<li><a href="https://milligram.github.io/#forms" title="Forms">Forms</a></li>
-						<li><a href="https://milligram.github.io/#tables" title="Tables">Tables</a></li>
-						<li><a href="https://milligram.github.io/#grids" title="Grids">Grids</a></li>
-						<li><a href="https://milligram.github.io/#codes" title="Codes">Codes</a></li>
-						<li><a href="https://milligram.github.io/#utilities" title="Utilities">Utilities</a></li>
-						<li><a href="https://milligram.github.io/#tips" title="Tips">Tips</a></li>
-						<li><a href="https://milligram.github.io/#browser-support" title="Browser Support">Browser Support</a></li>
-					</ul>
-				</p>
-			</section>
+						<div class="column column-25 column-offset-50" id="usersOnline"><a id="users-link" href="#users"><i class="fa fa-user fa-lg"></i> - 6 online</a></div>
+						<div class="column column-25"><input type="text" id="roomCode" /></div>
 
-			<section class="container" id="contributing">
-				<h5 class="title">Contributing</h5>
-				<p>Want to contribute? Follow these <a href="https://github.com/milligram/milligram/blob/master/.github/contributing.md" title="Contributing">recommendations</a>.</p>
-			</section>
+					</div>
+					<div class="row">
+						<video id="video" class="video-js vjs-default-skin vjs-big-play-centered"
+							   controls
+							   preload="auto"
+							   autoplay
+							   data-setup='{ "fluid": true, techOrder["youtube"] }'>
+							<source src="https://www.youtube.com/watch?v=H4DQLOEskeY" type='video/youtube'>
+						</video>
+					</div>
+					<div class="row controls-margin-top" id="controls">
+						<div class="column column-25 left-align">
+							<p><i class="fa fa-keyboard-o fa-lg"></i> Designed by <a target="_blank" href="http://alecchan.org" title="Alec Chan">Alec Chan</a>.<br /><i class="fa fa-commenting-o fa-lg"></i> Join our <a href="https://discord.gg/y2ve7Yw" target="_blank">discord server!</a></p>
+						</div>
+						<div class="column column-50"><button class="button">Clear Queue</button> <button class="button">Add To Queue</button></div>
+						<div class="column column-25"><input type="text" placeholder="Video URL here..." id="videoURL"></div>
+					</div>
+				</div>
+			</div>
+			<hr class="style15"/>
+			<div class="table-content" id="content">
+				<div class="row">
+					<div class="column column-50">
+						<h4><a name="users"></a>Users in this room</h4>
+						<table class="table-left">
 
-			<footer class="footer">
-				<section class="container">
-					<p>Designed with ♥ by <a target="_blank" href="http://cjpatoilo.com" title="CJ Patoilo">CJ Patoilo</a>. Licensed under the <a target="_blank" href="https://github.com/milligram/milligram#license" title="MIT License">MIT License</a>.</p>
-				</section>
-			</footer>
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Status</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>The Owner</td>
+									<td>Owner</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td>Some User</td>
+									<td>Viewer</td>
+									<td><a href="#remove"><i class="fa fa-times"></i></a>  |  <a href="#upgrade-user"><i class="fa fa-thumbs-up"></i></a>  |  <a href="#downgrade-user"><i class="fa fa-thumbs-down"></i></a></td>
+								</tr>
+								<tr>
+									<td>Another User</td>
+									<td>Trusted</td>
+									<td><a href="#remove"><i class="fa fa-times"></i></a>  |  <a href="#upgrade-user"><i class="fa fa-thumbs-up"></i></a>  |  <a href="#downgrade-user"><i class="fa fa-thumbs-down"></i></a></td>
+								</tr>
+								<tr>
+									<td>Some User</td>
+									<td>Viewer</td>
+									<td><a href="#remove"><i class="fa fa-times"></i></a>  |  <a href="#upgrade-user"><i class="fa fa-thumbs-up"></i></a>  |  <a href="#downgrade-user"><i class="fa fa-thumbs-down"></i></a></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="column column-50">
+						<h4 class="table-right">Queue</h4>
+						<table class="table-right">
+							<thead>
+								<tr>
+									<th></th>
+									<th>URL</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody id="queue-body">
+								<tr>
+									<td> <i class="fa fa-bars"></i></td>
+									<td>https://www.youtube.com/watch?v=wqerqwrwerwe</td>
+									<td><a href="#remove"><i class="fa fa-times"></i></a></td>
+								</tr>
+								<tr>
+									<td> <i class="fa fa-bars"></i></td>
+									<td>https://www.youtube.com/watch?v=asdfasdfasf</td>
+									<td><a href="#remove"><i class="fa fa-times"></i></a></td>
+								</tr>
+								<tr>
+									<td> <i class="fa fa-bars"></i></td>
+									<td>https://www.youtube.com/watch?v=zxcvzxcvxcz</td>
+									<td><a href="#remove"><i class="fa fa-times"></i></a></td>
+								</tr>
+								<tr>
+									<td> <i class="fa fa-bars"></i></td>
+									<td>https://www.youtube.com/watch?v=hjklhjklhjkl</td>
+									<td><a href="#remove"><i class="fa fa-times"></i></a></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
 
 		</main>
 
-		<script src="scripts/main.js"></script>
-
+		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+		<script src="jsm/main.min.js"></script>
+		<script src="jsm/video.min.js"></script>
+		<script src="jsm/init.min.js"></script>
+		<script src="jsm/permissions.min.js"></script>
+		<script src="jsm/sockets.min.js"></script>
+		<script src="jsm/video-controls.min.js"></script>
+		<script src="jsm/Youtube.min.js"></script>
+		<script type="text/javascript">
+			$('#queue-body').sortable();
+		</script>
 	</body>
 </html>

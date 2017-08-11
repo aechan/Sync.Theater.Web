@@ -1,11 +1,11 @@
-module.exports = function (grunt) {
+﻿module.exports = function (grunt) {
     grunt.initConfig({
 
         // define source files and their destinations
         uglify: {
             files: { 
-                src: 'js/*.js',  // source files mask
-                dest: 'jsm/',    // destination folder
+                src: 'src/scripts/*.js',  // source files mask
+                dest: 'src/jsm/',    // destination folder
                 expand: true,    // allow dynamic building
                 flatten: true,   // remove all unnecessary nesting
                 ext: '.min.js'   // replace .js to .min.js
@@ -15,9 +15,9 @@ module.exports = function (grunt) {
             target: {
                 files: [{
                 expand: true,
-                cwd: 'css/',
+                cwd: 'src/styles/',
                 src: ['*.css', '!*.min.css'],
-                dest: 'cssm/',
+                dest: 'src/cssm/',
                 ext: '.min.css'
                 }]
             }
@@ -35,14 +35,14 @@ module.exports = function (grunt) {
                     minifyJS: true,
                 },
                 files: {                                                // Dictionary of files
-                    'htmlm/index.min.html': 'html/index.html',     // dest : src
+                    'src/index.min.html': 'src/index.html',     // dest : src
                 }
             },
         },
         watch: {
-            js:  { files: 'Public/js/*.js', tasks: [ 'newer:uglify' ] },
-            css: {files: 'Public/css/*.css', tasks: ['newer:cssmin']},
-            html: {files: 'Public/index.html', tasks: ['newer:htmlmin']}
+            js:  { files: 'src/scripts/*.js', tasks: [ 'newer:uglify' ] },
+            css: {files: 'src/styles/*.css', tasks: ['newer:cssmin']},
+            html: {files: 'src/index.html', tasks: ['newer:htmlmin']}
         },
     });
 
