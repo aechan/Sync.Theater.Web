@@ -11,6 +11,7 @@ var levelString = function (level) {
     else { return "Value is not a UserPermissionLevel"; }
 }
 
+
 var SyncPermissionsManager = {
     permissionLevel: UserPermissionLevel.VIEWER,
 

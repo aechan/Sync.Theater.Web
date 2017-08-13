@@ -1,23 +1,34 @@
-var path = window.location.pathname;
+﻿var path = window.location.pathname;
 
 var href = window.location.href;
-var socket = new WebSocket('ws://' + window.location.hostname + ':8080' + path);
 
-socket.onmessage = function (e) {
-    interpretMessage(JSON.parse(e.data));
-};
+var socket = connect();
 
-socket.onopen = function(e){
 
-};
+function connect() {
+    var ws = new WebSocket('ws://' + window.location.hostname + ':8080' + path);
 
-socket.onclose = function(e){
-    // retry connection
+    ws.onmessage = function (e) {
+        console.log(e.data);
+        interpretMessage(JSON.parse(e.data));
+    };
 
-    //setInterval(function () {
-      //  if (socket.readyState == )
-    //}, 500);
-};
+    ws.onclose = function (e) {
+        console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
+        setTimeout(function () {
+            connect();
+        }, 1000);
+    };
+
+    ws.onerror = function (err) {
+        console.error('Socket encountered error: ', err.message, 'Closing socket');
+        ws.close();
+    };
+
+    return ws;
+}
+
+
 
 
 // manages sending messages to the server.
@@ -35,12 +46,11 @@ var SocketCommandManager = {
 
     // forces others to sync to our video state if owner
     syncState: function(time, pauseState){
-        if(SyncPermissionsManager.permissionLevel == UserPermissionLevel.OWNER ||
-            SyncPermissionsManager.permissionLevel == UserPermissionLevel.TRUSTED){
+        if (SyncPermissionsManager.permissionLevel == UserPermissionLevel.OWNER ){//|| SyncPermissionsManager.permissionLevel == UserPermissionLevel.TRUSTED){
             socket.send(JSON.stringify({
                 CommandType: CommandType.SYNCSTATE,
                 Time: time,
-                PauseState: pauseState
+                Paused: pauseState
             }));
         }
     }
@@ -53,7 +63,7 @@ var interpretMessage = function(obj){
     }
 
     if (obj.CommandType == CommandType.SYNCSTATE && SyncPermissionsManager.permissionLevel != UserPermissionLevel.OWNER) {
-        VideoManager.setState(obj.State.Time, obj.State.Time);
+        VideoManager.setState(obj.State.Time, obj.State.Paused);
     }
 };
 
