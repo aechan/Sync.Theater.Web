@@ -9,7 +9,7 @@ function connect() {
     var ws = new WebSocket('ws://' + window.location.hostname + ':8080' + path);
 
     ws.onmessage = function (e) {
-        console.log(e.data);
+        //console.log(e.data);
         interpretMessage(JSON.parse(e.data));
     };
 

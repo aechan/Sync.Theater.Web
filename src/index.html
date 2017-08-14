@@ -34,14 +34,13 @@
 							   preload="auto"
 							   autoplay
 							   data-setup='{ "fluid": true, techOrder["youtube"] }'>
-							<source src="https://www.youtube.com/watch?v=23p11nppcyo" type='video/youtube'>
 						</video>
 					</div>
 					<div class="row controls-margin-top" id="controls">
 						<div class="column column-25 left-align">
 							<p><i class="fa fa-keyboard-o fa-lg"></i> Designed by <a target="_blank" href="http://alecchan.org" title="Alec Chan">Alec Chan</a>.<br /><i class="fa fa-commenting-o fa-lg"></i> Join our <a href="https://discord.gg/y2ve7Yw" target="_blank">discord server!</a></p>
 						</div>
-						<div class="column column-50"><button class="button">Clear Queue</button> <button class="button">Add To Queue</button></div>
+						<div class="column column-50"><button class="button">Clear Queue</button> <button id="addToQueueBtn" class="button">Add To Queue</button></div>
 						<div class="column column-25"><input type="text" placeholder="Video URL here..." id="videoURL"></div>
 					</div>
 				</div>
@@ -95,26 +94,6 @@
 								</tr>
 							</thead>
 							<tbody id="queue-body">
-								<tr>
-									<td> <i class="fa fa-bars"></i></td>
-									<td>https://www.youtube.com/watch?v=wqerqwrwerwe</td>
-									<td><a href="#remove"><i class="fa fa-times"></i></a></td>
-								</tr>
-								<tr>
-									<td> <i class="fa fa-bars"></i></td>
-									<td>https://www.youtube.com/watch?v=asdfasdfasf</td>
-									<td><a href="#remove"><i class="fa fa-times"></i></a></td>
-								</tr>
-								<tr>
-									<td> <i class="fa fa-bars"></i></td>
-									<td>https://www.youtube.com/watch?v=zxcvzxcvxcz</td>
-									<td><a href="#remove"><i class="fa fa-times"></i></a></td>
-								</tr>
-								<tr>
-									<td> <i class="fa fa-bars"></i></td>
-									<td>https://www.youtube.com/watch?v=hjklhjklhjkl</td>
-									<td><a href="#remove"><i class="fa fa-times"></i></a></td>
-								</tr>
 							</tbody>
 						</table>
 					</div>
@@ -131,9 +110,19 @@
 		<script src="jsm/permissions.min.js"></script>
 		<script src="jsm/sockets.min.js"></script>
 		<script src="jsm/video-controls.min.js"></script>
+		<script src="jsm/queue.min.js"></script>
 		<script src="jsm/Youtube.min.js"></script>
 		<script type="text/javascript">
-			$('#queue-body').sortable();
+			$('#queue-body').sortable({
+				axis: 'y',
+				items: "tr",
+				update: function (event, ui) {
+					var data = $(this).sortable("serialize", { key: "url" });
+
+					Queue.sortQueue(data);
+				}
+			});
+
 		</script>
 	</body>
 </html>
