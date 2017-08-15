@@ -18,6 +18,38 @@ var SyncPermissionsManager = {
     modifyPermissions: function (level) {
         console.log("Modified permissions: " + levelString(this.permissionLevel) + " to " + levelString(level));
         this.permissionLevel = level;
+
+        if (this.permissionLevel === UserPermissionLevel.VIEWER) {
+            $("#controls").hide();
+            $("#QueueName").attr('readonly', true);
+            $("#queue-body").sortable("disable");
+        }
+        else if (this.permissionLevel === UserPermissionLevel.TRUSTED){
+            $("#controls").show();
+            $("#QueueName").attr('readonly', false);
+            $('#queue-body').sortable({
+                axis: 'y',
+                items: "tr",
+                update: function (event, ui) {
+                    var data = $(this).sortable("serialize", { key: "url" });
+
+                    Queue.sortQueue(data);
+                }
+            });
+        }
+        else if (this.permissionLevel === UserPermissionLevel.OWNER) {
+            $("#controls").show();
+            $("#QueueName").attr('readonly', false);
+            $('#queue-body').sortable({
+                axis: 'y',
+                items: "tr",
+                update: function (event, ui) {
+                    var data = $(this).sortable("serialize", { key: "url" });
+
+                    Queue.sortQueue(data);
+                }
+            });
+        }
     }
 
 };

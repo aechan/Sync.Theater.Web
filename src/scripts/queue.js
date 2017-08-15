@@ -1,5 +1,8 @@
 ﻿var Queue = {
 
+    autoRestart: false,
+    autoPlay: true,
+
     currentQueue: {
         Name: "",
         QueueIndex: 0,
@@ -21,12 +24,18 @@
             this.currentQueue.URLItems["url_" + index].URL = url;
             this.currentQueue.URLItems["url_" + index].index = index;
 
+            SocketCommandManager.syncQueue(this.queueToJSON());
+
             this.rebuildQueueView();
         }
     },
 
     rebuildQueueView: function () {
         $("#queue-body").html("");
+
+        if ($("#QueueName").val() != this.currentQueue.Name) {
+            $("#QueueName").val(this.currentQueue.Name);
+        }
         for (key in this.currentQueue.URLItems) {
             $("#queue-body").append('<tr id="' + key +'">\
                 <td> <i class="fa fa-bars"></i></td>\
@@ -34,12 +43,18 @@
                 <td><a id="'+ key + '_remove' +'" href="#remove"><i class="fa fa-times"></i></a></td>\
 				</tr >');
 
-            $("#" + key + "_remove").click(function () {
-                Queue.removeFromQueue(($(this).attr('id').replace("_remove", "")));
+            $("#" + key + "_remove").click(function (event) {
+                event.preventDefault();
+                if (SyncPermissionsManager.permissionLevel === UserPermissionLevel.OWNER || SyncPermissionsManager.permissionLevel === UserPermissionLevel.TRUSTED) {
+                    Queue.removeFromQueue(($(this).attr('id').replace("_remove", "")));
+                }
             });
 
-            $("#" + key + "_play").click(function () {
-                Queue.playItem(($(this).attr('id').replace("_play", "")));
+            $("#" + key + "_play").click(function (event) {
+                event.preventDefault();
+                if (SyncPermissionsManager.permissionLevel === UserPermissionLevel.OWNER || SyncPermissionsManager.permissionLevel === UserPermissionLevel.TRUSTED) {
+                    Queue.playItem(($(this).attr('id').replace("_play", "")));
+                }
             });
         }
     },
@@ -47,11 +62,13 @@
     removeFromQueue: function (key) {
         delete this.currentQueue.URLItems[key];
 
+        SocketCommandManager.syncQueue(this.queueToJSON());
+
         this.rebuildQueueView();
     },
 
     sortQueue: function (sortedData) {
-        console.log(sortedData);
+        var currentKey = this.urlItemKeyFromIndex(this.currentQueue.QueueIndex);
 
         var URLArr = sortedData.split("&");
 
@@ -61,6 +78,24 @@
 
             this.currentQueue.URLItems[key].index = i;
         }
+
+
+		// change the queueindex to match the currently playing media
+        this.currentQueue.QueueIndex = this.urlItemIndexFromKey(currentKey);
+
+        SocketCommandManager.syncQueue(this.queueToJSON());
+    },
+
+    urlItemKeyFromIndex: function (index) {
+        for (var key in this.currentQueue.URLItems) {
+            if (this.currentQueue.URLItems[key].index === index) {
+                return key;
+            }
+        }
+    },
+
+    urlItemIndexFromKey: function (key) {
+        return this.currentQueue.URLItems[key].index;
     },
 
 	// serializes our queue to json for updating the server
@@ -77,7 +112,7 @@
             URLs: urls
         };
 
-        return JSON.stringify(queue);
+        return queue;
     },
 
 	// builds queue from json recieved from server
@@ -89,8 +124,15 @@
         for (var i = 0; i < jsonObj.URLs.length; i++) {
             this.addToQueue(jsonObj.URLs[i]);
         }
-    },
 
+        for (var key in this.currentQueue.URLItems) {
+            if (this.currentQueue.URLItems[key].index === this.currentQueue.QueueIndex) {
+                this.playItem(key);
+            }
+        }
+
+
+    },
 
 	validURL: function (str) {
         var expression = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
@@ -107,91 +149,46 @@
     playItem: function (key) {
         this.currentQueue.QueueIndex = this.currentQueue.URLItems[key].index;
 
-        video.src({
-            type: "application/x-mpegURL",
-            src: this.currentQueue.URLItems[key].URL
-        });
+        if (~this.currentQueue.URLItems[key].URL.indexOf("youtu.be") || ~this.currentQueue.URLItems[key].URL.indexOf("youtube.com")) {
+            video.src({
+                type: "video/youtube",
+                src: this.currentQueue.URLItems[key].URL
+            });
+        } else {
+            video.src(this.currentQueue.URLItems[key].URL);
+        }
+        
         video.play();
+
+        SocketCommandManager.syncQueue(this.queueToJSON());
     },
     
+    autoAdvanceQueue: function () {
+        var url_key = "";
+        for (var key in this.currentQueue.URLItems) {
+            if (this.currentQueue.URLItems[key].index == this.currentQueue.QueueIndex + 1) {
+                url_key = key;
+            }
+        }
 
+        if (url_key === "") {
+            if (Queue.autoRestart) {
+                for (var key in this.currentQueue.URLItems) {
+                    if (this.currentQueue.URLItems[key].index === 0) {
+                        this.playItem(key);
+                    }
+                }
+            }
+            else {
+                return;
+            }
+        }
+        else {
+            this.playItem(url_key);
+        }
 
-    buildTestQueue: function () {
-        this.addToQueue("https://www.youtube.com/watch?v=asdf");
-        this.addToQueue("https://www.youtube.com/watch?v=ggagsdg");
-        
     }
 };
-
-
-
-var MIMEUtils = {
-	// Return the first few bytes of the file as a hex string
-	getBLOBFileHeader: function(url, blob, callback) {
-		var fileReader = new FileReader();
-		fileReader.onloadend = function (e) {
-			var arr = (new Uint8Array(e.target.result)).subarray(0, 4);
-			var header = "";
-			for (var i = 0; i < arr.length; i++) {
-				header += arr[i].toString(16);
-			}
-			callback(url, header);
-		};
-		fileReader.readAsArrayBuffer(blob);
-    },
-
-    remoteCallback: function (url, blob) {
-        this.getBLOBFileHeader(url, blob, headerCallback);
-    },
-
-    mimeType: function (headerString) {
-        var type = "";
-        switch (headerString) {
-            case "89504e47":
-                type = "image/png";
-                break;
-            case "47494638":
-                type = "image/gif";
-                break;
-            case "ffd8ffe0":
-            case "ffd8ffe1":
-            case "ffd8ffe2":
-                type = "image/jpeg";
-                break;
-            default:
-                type = "unknown";
-                break;
-        }
-        return type;
-    },
-
-    getRemoteFileHeader: function (url, callback) {
-        var xhr = new XMLHttpRequest();
-        // Bypass CORS for this demo - naughty, Drakes
-        xhr.open('GET', '//cors-anywhere.herokuapp.com/' + url);
-        xhr.responseType = "blob";
-        xhr.onload = function () {
-            callback(url, xhr.response);
-        };
-        xhr.onerror = function () {
-            alert('A network error occurred!');
-        };
-        xhr.send();
-    },
-
-	headerCallback: function(url, headerString) {
-        mimeType(headerString);
-    },
-
-
-    getMimeType: function(url) {
-        getRemoteFileHeader(url, this.remoteCallback);
-    }
-
-
-}
-
-
 
 $("#addToQueueBtn").click(function () {
     Queue.addToQueue($("#videoURL").val());
@@ -203,4 +200,16 @@ $("#videoURL").keypress(function (e) {
         $("#addToQueueBtn").click();
 
     }
+});
+
+$("#QueueName").on("input", function (e) {
+    if ($(this).data("lastval") != $(this).val()) {
+        $(this).data("lastval", $(this).val());
+
+        //change action
+        Queue.currentQueue.Name = $(this).val();
+
+		// sync it
+        SocketCommandManager.syncQueue(Queue.queueToJSON());
+    };
 });

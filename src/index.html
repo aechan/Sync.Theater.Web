@@ -16,36 +16,48 @@
 		
 	</head>
 	<body>
-
-		<main class="wrapper">
-
+		
+		<div id="menu" class="panel">
+			<h3 id="chatTitle">Chat</h3>
+			<div id="chatArea"></div>
+			<input id="messageBox" type="text" placeholder="Your message here.." />
+		</div>
+		<main class="wrapper wrap push">
+			<a href="#menu" class="menu-link" draggable="false" style="position:fixed; z-index: 100000000">
+				<span class="toggle-button">
+					<div class="menu-bar menu-bar-top"></div>
+					<div class="menu-bar menu-bar-middle"></div>
+					<div class="menu-bar menu-bar-bottom"></div>
+				</span>
+			</a>
 			<div id="home">
 				<div id="centered-content" class="center right-align">
 					<h1 id="title">sync.theater</h1>
 					<div class="row row-top">
-
-						<div class="column column-25 column-offset-50" id="usersOnline"><a id="users-link" href="#users"><i class="fa fa-user fa-lg"></i> - 6 online</a></div>
-						<div class="column column-25"><input type="text" id="roomCode" /></div>
+						<div class="column column-25 column-offset-50" id="usersOnline"><a id="users-link" href="#users"></a></div>
+						<div class="column column-25"><input type="text" id="roomCode" readonly /></div>
 
 					</div>
 					<div class="row">
 						<video id="video" class="video-js vjs-default-skin vjs-big-play-centered"
-							   controls
-							   preload="auto"
-							   autoplay
-							   data-setup='{ "fluid": true, techOrder["youtube"] }'>
-						</video>
+								controls
+								preload="auto"
+								autoplay
+								data-setup='{ "fluid": true, techOrder["youtube"] }'></video>
+						
 					</div>
+
 					<div class="row controls-margin-top" id="controls">
 						<div class="column column-25 left-align">
 							<p><i class="fa fa-keyboard-o fa-lg"></i> Designed by <a target="_blank" href="http://alecchan.org" title="Alec Chan">Alec Chan</a>.<br /><i class="fa fa-commenting-o fa-lg"></i> Join our <a href="https://discord.gg/y2ve7Yw" target="_blank">discord server!</a></p>
 						</div>
-						<div class="column column-50"><button class="button">Clear Queue</button> <button id="addToQueueBtn" class="button">Add To Queue</button></div>
+						<div class="column column-50"><button id="addToQueueBtn" class="button">Add To Queue</button></div>
 						<div class="column column-25"><input type="text" placeholder="Video URL here..." id="videoURL"></div>
 					</div>
+					<div class="fixedBottom center-align"><div class="hearts"></div><a href="#like" class="fa-stack fa-1x likeBtn" id="like-btn"><i class="fa fa-heart fa-stack-2x"></i><span id="likeCount" class="fa fa-stack-1x whitecolor">6</span></a></div>
 				</div>
 			</div>
-			<hr class="style15"/>
+			<hr class="style15" />
 			<div class="table-content" id="content">
 				<div class="row">
 					<div class="column column-50">
@@ -59,32 +71,11 @@
 									<th></th>
 								</tr>
 							</thead>
-							<tbody>
-								<tr>
-									<td>The Owner</td>
-									<td>Owner</td>
-									<td></td>
-								</tr>
-								<tr>
-									<td>Some User</td>
-									<td>Viewer</td>
-									<td><a href="#remove"><i class="fa fa-times"></i></a>  |  <a href="#upgrade-user"><i class="fa fa-thumbs-up"></i></a>  |  <a href="#downgrade-user"><i class="fa fa-thumbs-down"></i></a></td>
-								</tr>
-								<tr>
-									<td>Another User</td>
-									<td>Trusted</td>
-									<td><a href="#remove"><i class="fa fa-times"></i></a>  |  <a href="#upgrade-user"><i class="fa fa-thumbs-up"></i></a>  |  <a href="#downgrade-user"><i class="fa fa-thumbs-down"></i></a></td>
-								</tr>
-								<tr>
-									<td>Some User</td>
-									<td>Viewer</td>
-									<td><a href="#remove"><i class="fa fa-times"></i></a>  |  <a href="#upgrade-user"><i class="fa fa-thumbs-up"></i></a>  |  <a href="#downgrade-user"><i class="fa fa-thumbs-down"></i></a></td>
-								</tr>
-							</tbody>
+							<tbody id="user-body"></tbody>
 						</table>
 					</div>
 					<div class="column column-50">
-						<h4 class="table-right">Queue</h4>
+						<input id="QueueName" type="text" class="table-right" value="" placeholder="Your queue name.." />
 						<table class="table-right">
 							<thead>
 								<tr>
@@ -93,8 +84,7 @@
 									<th></th>
 								</tr>
 							</thead>
-							<tbody id="queue-body">
-							</tbody>
+							<tbody id="queue-body"></tbody>
 						</table>
 					</div>
 				</div>
@@ -105,6 +95,7 @@
 		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 		<script src="jsm/main.min.js"></script>
+		<script src="jsm/user.min.js"></script>
 		<script src="jsm/video.min.js"></script>
 		<script src="jsm/init.min.js"></script>
 		<script src="jsm/permissions.min.js"></script>
@@ -112,17 +103,17 @@
 		<script src="jsm/video-controls.min.js"></script>
 		<script src="jsm/queue.min.js"></script>
 		<script src="jsm/Youtube.min.js"></script>
-		<script type="text/javascript">
-			$('#queue-body').sortable({
-				axis: 'y',
-				items: "tr",
-				update: function (event, ui) {
-					var data = $(this).sortable("serialize", { key: "url" });
-
-					Queue.sortQueue(data);
-				}
+		<script src="jsm/bigSlide.min.js"></script>
+		<script>
+			$(document).ready(function () {
+				$('.menu-link').bigSlide();
+				var $toggleButton = $('.toggle-button');
+				$toggleButton.on('click', function (event) {
+					event.preventDefault();
+					$(this).toggleClass('button-open');
+				});
 			});
-
 		</script>
-	</body>
+
+</body>
 </html>
