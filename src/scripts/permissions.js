@@ -27,28 +27,12 @@ var SyncPermissionsManager = {
         else if (this.permissionLevel === UserPermissionLevel.TRUSTED){
             $("#controls").show();
             $("#QueueName").attr('readonly', false);
-            $('#queue-body').sortable({
-                axis: 'y',
-                items: "tr",
-                update: function (event, ui) {
-                    var data = $(this).sortable("serialize", { key: "url" });
-
-                    Queue.sortQueue(data);
-                }
-            });
+            $("#queue-body").sortable("option", "disabled", false);
         }
         else if (this.permissionLevel === UserPermissionLevel.OWNER) {
             $("#controls").show();
             $("#QueueName").attr('readonly', false);
-            $('#queue-body').sortable({
-                axis: 'y',
-                items: "tr",
-                update: function (event, ui) {
-                    var data = $(this).sortable("serialize", { key: "url" });
-
-                    Queue.sortQueue(data);
-                }
-            });
+            $("#queue-body").sortable("option", "disabled", false);
         }
     }
 

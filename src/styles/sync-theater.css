@@ -80,11 +80,11 @@ input[type="text"]{
 }
 
 .table-right{
-	margin-left: 10rem;
+	padding-left: 3rem;
 
 }
 .table-left{
-	margin-right: 10rem;
+	padding-right: 3rem;
 }
 
 .controls-margin-top{
@@ -376,5 +376,30 @@ div.heart {
 	bottom: 0;
 	right: 0;
 	width: 100%;
-	z-index: 1000000;
+	z-index: 10000;
+}
+
+#queue-body tr {
+	-webkit-transition: background-color 0.5s ease; /* Safari and Chrome */
+	-moz-transition: background-color 0.5s ease; /* Firefox */
+	-ms-transition: background-color 0.5s ease; /* IE 9 */
+	-o-transition: background-color 0.5s ease; /* Opera */
+	transition: background-color 0.5s ease;
+}
+#queue-body tr:hover {
+	background-color: rgba(255,255,255,0.2);
+	
+}
+
+.hearts {
+	pointer-events: none;
+}
+
+#roomCode {
+	color: #FFC107;
+	border-color: #9b4dca;
+}
+
+#menu{
+	z-index: 100000;
 }

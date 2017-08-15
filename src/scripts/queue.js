@@ -38,8 +38,8 @@
         }
         for (key in this.currentQueue.URLItems) {
             $("#queue-body").append('<tr id="' + key +'">\
-                <td> <i class="fa fa-bars"></i></td>\
-                <td><a href="#play" id='+ key + '_play' +'>'+ Queue.currentQueue.URLItems[key].URL +'</a></td>\
+                <td>  <i class="fa fa-bars"></i></td>\
+                <td><a href="#play" id='+ key + '_play' +'> <i class="fa fa-play-circle" aria-hidden="true"></i> -- '+ Queue.currentQueue.URLItems[key].URL +'</a></td>\
                 <td><a id="'+ key + '_remove' +'" href="#remove"><i class="fa fa-times"></i></a></td>\
 				</tr >');
 
@@ -150,17 +150,30 @@
         this.currentQueue.QueueIndex = this.currentQueue.URLItems[key].index;
 
         if (~this.currentQueue.URLItems[key].URL.indexOf("youtu.be") || ~this.currentQueue.URLItems[key].URL.indexOf("youtube.com")) {
+
             video.src({
                 type: "video/youtube",
-                src: this.currentQueue.URLItems[key].URL
+                src: Queue.currentQueue.URLItems[key].URL
             });
+            video.play();
+            SocketCommandManager.syncQueue(Queue.queueToJSON());
+        } else if (~this.currentQueue.URLItems[key].URL.endsWith(".webm")) {
+            video.src({
+                type: "video/webm",
+                src: Queue.currentQueue.URLItems[key].URL
+            });
+            video.play();
+            SocketCommandManager.syncQueue(Queue.queueToJSON());
         } else {
-            video.src(this.currentQueue.URLItems[key].URL);
+            video.src({
+                type: "video/mp4",
+                src: Queue.currentQueue.URLItems[key].URL
+            });
+            video.play();
+            SocketCommandManager.syncQueue(Queue.queueToJSON());
         }
-        
-        video.play();
 
-        SocketCommandManager.syncQueue(this.queueToJSON());
+        
     },
     
     autoAdvanceQueue: function () {

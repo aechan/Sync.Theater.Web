@@ -35,7 +35,7 @@
 					<h1 id="title">sync.theater</h1>
 					<div class="row row-top">
 						<div class="column column-25 column-offset-50" id="usersOnline"><a id="users-link" href="#users"></a></div>
-						<div class="column column-25"><input type="text" id="roomCode" readonly /></div>
+						<div class="column column-25"><input type="text" id="roomCode" onclick="this.select();" readonly /></div>
 
 					</div>
 					<div class="row">
@@ -75,7 +75,7 @@
 						</table>
 					</div>
 					<div class="column column-50">
-						<input id="QueueName" type="text" class="table-right" value="" placeholder="Your queue name.." />
+						<input id="QueueName" type="text" style="margin-left: 3rem; width: 50%;" value="" placeholder="Your queue name.." />
 						<table class="table-right">
 							<thead>
 								<tr>
@@ -89,7 +89,14 @@
 					</div>
 				</div>
 			</div>
-
+			<footer class="footer">
+				<section class="container">
+					<div class="row">
+						
+						<div class="column center-align"><p>This site is a beta and is not guaranteed to work correctly. For a more stable experience use the main site: <a href="http://sync.theater">sync.theater</a></p></div>
+					</div>
+				</section>
+			</footer>
 		</main>
 
 		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -111,6 +118,16 @@
 				$toggleButton.on('click', function (event) {
 					event.preventDefault();
 					$(this).toggleClass('button-open');
+				});
+
+				$('#queue-body').sortable({
+					axis: 'y',
+					items: "tr",
+					update: function (event, ui) {
+						var data = $(this).sortable("serialize", { key: "url" });
+
+						Queue.sortQueue(data);
+					}
 				});
 			});
 		</script>
