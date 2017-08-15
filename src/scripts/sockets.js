@@ -6,7 +6,7 @@ var socket = connect();
 
 
 function connect() {
-    var ws = new WebSocket('ws://' + window.location.hostname + ':8080' + path);
+    var ws = new WebSocket('ws://' + window.location.hostname + path);
 
     ws.onmessage = function (e) {
         //console.log(e.data);

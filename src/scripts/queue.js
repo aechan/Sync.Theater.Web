@@ -26,6 +26,10 @@
 
             SocketCommandManager.syncQueue(this.queueToJSON());
 
+            if (video.currentSrc() === "" && index === 0) {
+                Queue.playItem(Queue.urlItemKeyFromIndex(0));
+            }
+
             this.rebuildQueueView();
         }
     },
