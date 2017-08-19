@@ -5,11 +5,26 @@
         this.Nickname = nick;
 
         UserTable.updateView();
+    },
+
+    userList: [],
+
+    parseMessageForAt: function (message, sender) {
+        var words = message.split(" ");
+        for (var i = 0; i < words.length; i++) {
+            if (words[i].indexOf("@") == 0) {
+                if (words[i].substring(1).toUpperCase() === this.Nickname.toUpperCase()) {
+                    $.growl({ title: "@"+sender, message: message, style: "notice" });
+                }
+            }
+        }
+        
     }
 };
 
 var UserTable = {
     updateView: function (userListJSON) {
+        User.userList = userListJSON.UserList;
         $("#user-body").html("");
         $("#users-link").html("<i class='fa fa-user fa-lg'></i> - " + userListJSON.Userlist.length + " online");
         for (var i = 0; i < userListJSON.Userlist.length; i++) {

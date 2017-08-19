@@ -62,6 +62,14 @@ var SocketCommandManager = {
                 Queue: queueObj
             }));
         }
+    },
+
+    sendChat: function (message, sender) {
+        socket.send(JSON.stringify({
+            CommandType: CommandType.CHAT,
+            Sender: sender,
+			Message: message
+        }));
     }
 };
 
@@ -105,9 +113,10 @@ var interpretMessage = function(obj){
                 $(".part-" + b).remove()
             }, c * 900)
         //}
+    }
 
-        
-        
+    if (obj.CommandType == CommandType.CHAT) {
+        Chat.addMessage(obj.Message, obj.Sender);
     }
 };
 
@@ -139,5 +148,6 @@ var CommandType = {
         SENDUSERLIST: 12,
 
         ADDLIKE: 13,
-		UPDATELIKES: 14
+        UPDATELIKES: 14,
+		CHAT: 15
 };

@@ -361,9 +361,11 @@ div.heart {
 	width: 100%;
 }
 
-#messageBox{
-
-	height: 3vh;
+#messageBox {
+	height: 3.8rem;
+	position: fixed;
+	bottom: 0;
+	width: 15.6em;
 }
 
 #chatTitle{
@@ -402,4 +404,9 @@ div.heart {
 
 #menu{
 	z-index: 100000;
+	position:relative;
+}
+
+#chatContainer{
+	position: absolute;
 }
