@@ -11,7 +11,7 @@
             User.parseMessageForAt(message, sender);
         }
         $("#chatArea").append('\
-            <div class="talk-bubble round tri-right '+align+'">\
+            <div class="talk-bubble tri-right">\
 				<div class="talktext" >\
 					<p>'+sender+': '+message+'</p>\
 				</div>\

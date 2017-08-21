@@ -7,7 +7,7 @@
         UserTable.updateView();
     },
 
-    userList: [],
+    Userlist: [],
 
     parseMessageForAt: function (message, sender) {
         var words = message.split(" ");
@@ -24,17 +24,34 @@
 
 var UserTable = {
     updateView: function (userListJSON) {
-        User.userList = userListJSON.UserList;
+        var userControlPanel = function (nn) {
+            return (SyncPermissionsManager.permissionLevel === UserPermissionLevel.OWNER) ? '<td><a id="removeUser" href="#remove" data-name="' + nn + '"><i class="fa fa-times"></i></a>  |  <a id="upgradeUser" data-name="' + nn + '" href="#upgrade-user"><i class="fa fa-thumbs-up"></i></a>  |  <a id="downgradeUser" data-name="' + nn +'" href="#downgrade-user"><i class="fa fa-thumbs-down"></i></a></td>' : '<td></td>';
+        };
+        User.Userlist = userListJSON.Userlist;
         $("#user-body").html("");
         $("#users-link").html("<i class='fa fa-user fa-lg'></i> - " + userListJSON.Userlist.length + " online");
         for (var i = 0; i < userListJSON.Userlist.length; i++) {
             if (userListJSON.Userlist[i].Nickname != User.Nickname) {
                 $("#user-body").append('<tr>\
-                <td>'+ userListJSON.Userlist[i].Nickname + '</td>\
+                <td>'+ userListJSON.Userlist[i].Nickname + '</span></td>\
                 <td>'+ levelString(userListJSON.Userlist[i].PermissionLevel) + '</td>\
-                <td><a href="#remove"><i class="fa fa-times"></i></a>  |  <a href="#upgrade-user"><i class="fa fa-thumbs-up"></i></a>  |  <a href="#downgrade-user"><i class="fa fa-thumbs-down"></i></a></td>\</tr>');
+                '+ userControlPanel(userListJSON.Userlist[i].Nickname) + '</tr>');
 
                 //add <a> event handlers
+                $('#removeUser').click(function (e) {
+                    e.preventDefault();
+                    SocketCommandManager.kickUser($(this).attr("data-name"));
+                });
+
+                $('#upgradeUser').click(function (e) {
+                    e.preventDefault();
+                    SocketCommandManager.promoteUser($(this).attr("data-name"));
+                });
+
+                $('#downgradeUser').click(function (e) {
+                    e.preventDefault();
+                    SocketCommandManager.demoteUser($(this).attr("data-name"));
+                });
 
             } else {
                 $("#user-body").append('<tr>\

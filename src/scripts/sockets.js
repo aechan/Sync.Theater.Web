@@ -4,6 +4,7 @@ var href = window.location.href;
 
 var socket = connect();
 
+var reconnect_attempts = 0;
 
 function connect() {
     var ws = new WebSocket('ws://' + window.location.hostname + path);
@@ -15,13 +16,21 @@ function connect() {
 
     ws.onclose = function (e) {
         console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
+        $.growl({ style: 'error', title: 'Connection Error!', size: 'large', location: 'tc', fixed: false, message: 'Your connection to the server has been interrupted. Attempting to reconnect!' });
+
         setTimeout(function () {
-            connect();
+            if (reconnect_attempts < 4) {
+                
+                connect();
+                
+            }
+            
         }, 1000);
     };
 
     ws.onerror = function (err) {
         console.error('Socket encountered error: ', err.message, 'Closing socket');
+
         ws.close();
     };
 
@@ -69,6 +78,41 @@ var SocketCommandManager = {
             CommandType: CommandType.CHAT,
             Sender: sender,
 			Message: message
+        }));
+    },
+
+    kickUser: function (Nickname) {
+        if (SyncPermissionsManager.permissionLevel == UserPermissionLevel.OWNER) {
+            socket.send(JSON.stringify({
+                CommandType: CommandType.KICKUSER,
+                TargetNickname: Nickname
+            }));
+        }
+    },
+
+    promoteUser: function (Nickname) {
+        if (SyncPermissionsManager.permissionLevel == UserPermissionLevel.OWNER) {
+            socket.send(JSON.stringify({
+                CommandType: CommandType.UPGRADEUSERPERMISSIONS,
+                Upgrade: true,
+                TargetNickname: Nickname
+            }));
+        }
+    },
+
+    demoteUser: function (Nickname) {
+        if (SyncPermissionsManager.permissionLevel == UserPermissionLevel.OWNER) {
+            socket.send(JSON.stringify({
+                CommandType: CommandType.UPGRADEUSERPERMISSIONS,
+                TargetNickname: Nickname,
+                Upgrade: false
+            }));
+        }
+    },
+
+    refreshUserList: function () {
+        socket.send(JSON.stringify({
+            CommandType: CommandType.SENDUSERLIST
         }));
     }
 };
@@ -118,6 +162,11 @@ var interpretMessage = function(obj){
     if (obj.CommandType == CommandType.CHAT) {
         Chat.addMessage(obj.Message, obj.Sender);
     }
+
+    if (obj.CommandType == CommandType.KICKUSER) {
+        $.growl({ style: 'error', title: 'Sorry!', size: 'large', location: 'tc', fixed: true, message: 'You have been kicked by the room owner :(' });
+        connect = null;
+    }
 };
 
 $("#like-btn").click(function (event) {
@@ -127,27 +176,34 @@ $("#like-btn").click(function (event) {
     }));
 });
 
+$("#users-link").click(function (e) {
+    $('html, body').animate({
+        scrollTop: $("#users").offset().top
+    }, 2000);
+    return false;
+});
 var CommandType = {
         // User management commands
-        REGISTERUSER : 0,
-        LOGINUSER : 1,
-        UPGRADEUSERPERMISSIONS : 2,
-        PERMISSIONSCHANGEDNOTIFICATION : 3,
+    REGISTERUSER: "REGISTERUSER",
+    LOGINUSER: "LOGINUSER",
+    UPGRADEUSERPERMISSIONS: "UPGRADEUSERPERMISSIONS",
+    PERMISSIONSCHANGEDNOTIFICATION: "PERMISSIONSCHANGEDNOTIFICATION",
         // Queue commands
-        MODIFYQUEUE : 4,
-        ADDQUEUE : 5,
-        DELETEQUEUE : 6,
-        GETALL : 7,
-        GETONE : 8,
+    MODIFYQUEUE: "MODIFYQUEUE",
+    ADDQUEUE: "ADDQUEUE",
+    DELETEQUEUE: "DELETEQUEUE",
+    GETALL: "GETALL",
+    GETONE: "GETONE",
 
         // Video controls
-        SYNCSTATE: 9,
+    SYNCSTATE: "SYNCSTATE",
 
-        QUEUEUPDATE: 10,
-        SETUSERNICKNAME: 11,
-        SENDUSERLIST: 12,
+    QUEUEUPDATE: "QUEUEUPDATE",
+    SETUSERNICKNAME: "SETUSERNICKNAME",
+    SENDUSERLIST: "SENDUSERLIST",
 
-        ADDLIKE: 13,
-        UPDATELIKES: 14,
-		CHAT: 15
+    ADDLIKE: "ADDLIKE",
+    UPDATELIKES: "UPDATELIKES",
+    CHAT: "CHAT",
+    KICKUSER: "KICKUSER"
 };

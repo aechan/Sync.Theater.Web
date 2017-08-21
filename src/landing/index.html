@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="Watch movies and videos in real-time with friends!">
+		<title>sync.theater | A video site for friends.</title>
+		<link rel="icon" href="images/favicon.ico">
+        <link href="https://fonts.googleapis.com/css?family=Raleway:300" rel="stylesheet" />
+		<link rel="stylesheet" href="../lib/normalize.css/normalize.css">
+		<link rel="stylesheet" href="../lib/milligram/dist/milligram.min.css">
+		<link rel="stylesheet" href="landing/styles/main.css">
+        <script src="https://use.fontawesome.com/d244c2f21f.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+	</head>
+	<body>
+
+		<main class="wrapper">
+
+			<header class="container" id="home">
+                <div class="v-wrap">
+                    <div class="v-box">
+                        <h1 class="title">sync.theater</h1>
+                        <div class="row">
+                            <div class="column column-40">
+                                <input id="roomCode" type="text" placeholder="Enter a room code" />
+                                <span id="icon" class="errspan fa fa-lg"></span>
+                            </div>
+                            <h3 class="column column-20">
+                                or ..
+                            </h3>
+                            <div class="column column-40">
+                                <button onclick="window.location = 'http://' + window.location.hostname + '/newroom';">Create a room</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="section05">
+                    <a href="#examples"><span></span>Questions?</a>
+                </div>
+			</header>
+
+			<section class="container" id="examples">
+				<h3>What is sync.theater?</h3>
+				<p>sync.theater is a live video sharing app. What this means is that you can watch videos together with friends in real-time, like you were at a movie theater together.</p>
+                <p>To get started, click the "Create a room" button above or enter a room code given to you to be automatically taken to that room.</p>
+                <p>sync.theater allows you to queue up a number of videos in your room and it will automatically play through them.</p>
+                <p>In a sync.theater room, there is one owner who has absolute control over the video playback. Everyone else's video is synced to the owner's. The owner can promote other viewers to Trusted level which means that they are able to modify the room's queue but not control playback.</p>
+			</section>
+            <section class="container">
+                <h3>What kinds of videos work?</h3>
+                <p>Almost any kind of video that will play in your browser will work with sync.theater</p>
+                <p>There are some differences between browsers, but in general, any .mp4, or .webm videos will work. To play these type of videos, you must get a direct link to the video, not a link to a site with the video embedded. To get the direct link, you can usually right click on an embedded video and click 'Copy video address'.</p>
+                <p>Some other non direct video links will work with sync.theater, namely youtube.com, and crunchyroll.com </p>
+            </section>
+			<section class="container" id="contributing">
+				<h5 class="">Contributing</h5>
+				<p>Want to contribute? Follow these <a href="https://github.com/milligram/milligram/blob/master/.github/contributing.md" title="Contributing">recommendations</a>.</p>
+			</section>
+
+			<footer class="footer">
+				<section class="container">
+					<p>Designed with ♥ by <a target="_blank" href="http://alecchan.org" title="Alec Chan">Alec Chan</a>.<br /> Milligram CSS is licensed under the <a target="_blank" href="https://github.com/milligram/milligram#license" title="MIT License">MIT License</a>.</p>
+				</section>
+			</footer>
+
+		</main>
+
+		<script src="landing/scripts/main.js"></script>
+
+	</body>
+</html>
