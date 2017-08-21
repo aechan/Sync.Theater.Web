@@ -11,7 +11,6 @@
 
     addToQueue: function (url) {
         if (this.validURL(url)) {
-
 			// get count of urls before add
             var count = 0;
             for (key in this.currentQueue.URLItems) {
@@ -64,6 +63,12 @@
     },
 
     removeFromQueue: function (key) {
+        if (this.currentQueue.URLItems[key].index == this.currentQueue.QueueIndex && this.currentQueue.URLItems[key].index <= 1) {
+            this.currentQueue.QueueIndex += 1;
+        } else if (this.currentQueue.URLItems[key].index == this.currentQueue.QueueIndex) {
+            this.currentQueue.QueueIndex -= 1;
+        }
+
         delete this.currentQueue.URLItems[key];
 
         SocketCommandManager.syncQueue(this.queueToJSON());
@@ -168,6 +173,16 @@
             });
             video.play();
             SocketCommandManager.syncQueue(Queue.queueToJSON());
+        }
+        else if (~this.currentQueue.URLItems[key].URL.indexOf(".m3u8")) {
+            
+            video.src({
+                type: "application/x-mpegURL",
+                src: Queue.currentQueue.URLItems[key].URL
+            });
+            video.play();
+            SocketCommandManager.syncQueue(Queue.queueToJSON());
+
         } else {
             video.src({
                 type: "video/mp4",
@@ -208,8 +223,29 @@
 };
 
 $("#addToQueueBtn").click(function () {
-    Queue.addToQueue($("#videoURL").val());
-    $("#videoURL").val("");
+    if (~$("#videoURL").val().indexOf("crunchyroll.com")) {
+        $.ajax({
+            type: 'POST',
+            url: "http://" + window.location.hostname + "/crdecoder",
+            headers: { "x-cr-url": $("#videoURL").val() },
+            statusCode: {
+                200: function (data, textStatus, request) {
+                    Queue.addToQueue(request.responseText);
+                    $("#videoURL").val("");
+                },
+                500: function (data, textStatus, request) {
+                    $.growl({ style: 'error', title: 'Warning', size: 'large', location: 'tc', fixed: false, message: "The crunchyroll video could not be extracted, removing from queue." });
+                    
+                }
+            }
+
+
+        });
+    } else {
+        Queue.addToQueue($("#videoURL").val());
+        $("#videoURL").val("");
+    }
+    
 });
 
 $("#videoURL").keypress(function (e) {
