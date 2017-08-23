@@ -226,7 +226,7 @@ $("#addToQueueBtn").click(function () {
     if (~$("#videoURL").val().indexOf("crunchyroll.com")) {
         $.ajax({
             type: 'POST',
-            url: "http://" + window.location.hostname + "/crdecoder",
+            url: "/crdecoder",
             headers: { "x-cr-url": $("#videoURL").val() },
             statusCode: {
                 200: function (data, textStatus, request) {
