@@ -42,7 +42,7 @@
         for (key in this.currentQueue.URLItems) {
             $("#queue-body").append('<tr id="' + key +'">\
                 <td>  <i class="fa fa-bars"></i></td>\
-                <td><a href="#play" id='+ key + '_play' +'> <i class="fa fa-play-circle" aria-hidden="true"></i> -- '+ Queue.currentQueue.URLItems[key].URL +'</a></td>\
+                <td><a href="#play" id='+ key + '_play' +'> <i class="fa fa-play-circle" aria-hidden="true"></i> -- '+ Queue.currentQueue.URLItems[key].URL.substr(0,60)+'...' +'</a></td>\
                 <td><a id="'+ key + '_remove' +'" href="#remove"><i class="fa fa-times"></i></a></td>\
 				</tr >');
 
@@ -224,22 +224,23 @@
 
 $("#addToQueueBtn").click(function () {
     if (~$("#videoURL").val().indexOf("crunchyroll.com")) {
+        var url = $("#videoURL").val();
+        $("#videoURL").val("");
         $.ajax({
-            type: 'POST',
-            url: "/crdecoder",
-            headers: { "x-cr-url": $("#videoURL").val() },
+            type: 'GET',
+            url: "http://"+window.location.hostname+":8080",
+            headers: {
+                "x-cr-url": url,
+                "Authorization": "Basic YWxlYzp2YWthbWEwMDA="
+            },
             statusCode: {
                 200: function (data, textStatus, request) {
                     Queue.addToQueue(request.responseText);
-                    $("#videoURL").val("");
                 },
                 500: function (data, textStatus, request) {
                     $.growl({ style: 'error', title: 'Warning', size: 'large', location: 'tc', fixed: false, message: "The crunchyroll video could not be extracted, removing from queue." });
-                    
                 }
             }
-
-
         });
     } else {
         Queue.addToQueue($("#videoURL").val());

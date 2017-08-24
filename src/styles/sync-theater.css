@@ -81,10 +81,13 @@ input[type="text"]{
 
 .table-right{
 	padding-left: 3rem;
-
+    max-width: 100%;
+    width: 100%;
 }
 .table-left{
 	padding-right: 3rem;
+    max-width: 100%;
+    width: 100%;
 }
 
 .controls-margin-top{
@@ -380,6 +383,7 @@ div.heart {
 	width: 100%;
 	z-index: 10000;
 }
+
 
 #queue-body tr {
 	-webkit-transition: background-color 0.5s ease; /* Safari and Chrome */
