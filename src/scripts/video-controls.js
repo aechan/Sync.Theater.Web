@@ -16,6 +16,18 @@ video.on('timeupdate', function () {
     SocketCommandManager.syncState(video.currentTime(), video.paused());
 });
 
+video.on("waiting", function () {
+    User.Status = UserStatus.BUFFERING;
+    SocketCommandManager.sendStatusUpdate(User.Status);
+});
+
+video.on('playing', function () {
+    User.Status = UserStatus.WATCHING;
+    SocketCommandManager.sendStatusUpdate(User.Status);
+});
+
+
+
 
 var VideoManager = {
     setState: function (time, paused) {

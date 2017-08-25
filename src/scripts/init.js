@@ -9,5 +9,7 @@
         Queue.autoAdvanceQueue();
     });
 
+    SocketCommandManager.sendStatusUpdate(User.Status);
+
 };
 

@@ -10,7 +10,7 @@ function connect() {
     var ws = new WebSocket('ws://' + window.location.hostname + path);
 
     ws.onmessage = function (e) {
-        //console.log(e.data);
+        console.log(e.data);
         interpretMessage(JSON.parse(e.data));
     };
 
@@ -114,6 +114,13 @@ var SocketCommandManager = {
         socket.send(JSON.stringify({
             CommandType: CommandType.SENDUSERLIST
         }));
+    },
+
+    sendStatusUpdate: function (status) {
+        socket.send(JSON.stringify({
+            CommandType: CommandType.UPDATESTATUS,
+            Status: status
+        }));
     }
 };
 
@@ -205,5 +212,6 @@ var CommandType = {
     ADDLIKE: "ADDLIKE",
     UPDATELIKES: "UPDATELIKES",
     CHAT: "CHAT",
-    KICKUSER: "KICKUSER"
+    KICKUSER: "KICKUSER",
+    UPDATESTATUS: "UPDATESTATUS"
 };
