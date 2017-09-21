@@ -8,12 +8,13 @@
 		<link rel="icon" href="images/favicon.ico">
 		<link href="https://fonts.googleapis.com/css?family=Raleway:300" rel="stylesheet" />
 		<link rel="stylesheet" href="lib/normalize.css/normalize.css" />
-		<link rel="stylesheet" href="lib/milligram/dist/milligram.min.css" />
+		<link rel="stylesheet" href="lib/milligram/milligram.min.css" />
 		<link rel="stylesheet" href="cssm/main.min.css" />
 		<link href="http://vjs.zencdn.net/6.2.5/video-js.css" rel="stylesheet">
 		<link rel="stylesheet" href="cssm/sync-theater.min.css" />
 		<link rel="stylesheet" href="cssm/chat-bubbles.min.css" />
 		<link rel="stylesheet" href="cssm/jquery-growl.min.css" />
+		<link rel="stylesheet" href="cssm/introjs.min.css" />
 		<script src="https://use.fontawesome.com/d244c2f21f.js"></script>
 		
 	</head>
@@ -36,10 +37,10 @@
 			</a>
 			<div id="home">
 				<div id="centered-content" class="center right-align">
-					<h1 id="title">sync.theater</h1>
+					<h1 id="title" data-intro='Welcome to sync.theater! It looks like this is your first time here, press next to take the tour or click anywhere else to skip.' data-step=1>sync.theater</h1>
 					<div class="row row-top">
 						<div class="column column-25 column-offset-50" id="usersOnline"><a id="users-link" href="#users"></a></div>
-						<div class="column column-25"><input type="text" id="roomCode" onclick="this.select();" readonly /></div>
+						<div data-intro='Finally, copy this link and give it to your friends so they can join your room.' data-step=7 class="column column-25"><input type="text" id="roomCode" onclick="this.select();" readonly /></div>
 
 					</div>
 					<div class="row">
@@ -48,7 +49,6 @@
 								preload="auto"
 								autoplay
 								data-setup='{ "fluid": true, techOrder["html5", "youtube"] }'></video>
-						
 					</div>
 
 					<div class="row controls-margin-top" id="controls">
@@ -56,16 +56,16 @@
 							<p><i class="fa fa-keyboard-o fa-lg"></i> Designed by <a target="_blank" href="http://alecchan.org" title="Alec Chan">Alec Chan</a>.<br /><i class="fa fa-commenting-o fa-lg"></i> Join our <a href="https://discord.gg/y2ve7Yw" target="_blank">discord server!</a></p>
 						</div>
 
-						<div class="column column-50 controlItem"><button id="addToQueueBtn" class="button">Add To Queue</button></div>
-						<div class="column column-25 controlItem"><input type="text" placeholder="Video URL here..." id="videoURL"></div>
+						<div class="column column-50 controlItem"><button data-intro='Click here or press enter to add the video to your queue.' data-step=3 id="addToQueueBtn" class="button">Add To Queue</button></div>
+						<div class="column column-25 controlItem"><input data-intro='Enter the URL for a video you want to play here.' data-step=2 type="text" placeholder="Video URL here..." id="videoURL"></div>
 					</div>
-					<div class="fixedBottom center-align"><div class="hearts"></div><a href="#like" class="fa-stack fa-1x likeBtn" id="like-btn"><i class="fa fa-heart fa-stack-2x"></i><span id="likeCount" class="fa fa-stack-1x whitecolor">6</span></a></div>
+					<div class="fixedBottom center-align"><div class="hearts"></div><a data-intro='Click this to show everyone you like the video!' data-step=4 href="#like" class="fa-stack fa-1x likeBtn" id="like-btn"><i class="fa fa-heart fa-stack-2x"></i><span id="likeCount" class="fa fa-stack-1x whitecolor">6</span></a></div>
 				</div>
 			</div>
 			<hr class="style15" />
 			<div class="table-content" id="content">
 				<div class="row">
-					<div class="column column-50">
+					<div data-intro='This table shows all the users in the room, their permission level and if they are playing or buffering. If you are the room owner, you can manage your users here.' data-step=5 class="column column-50">
 						<h4><a name="users"></a>Users in this room</h4>
 						<table class="table-left">
 
@@ -80,7 +80,7 @@
 							<tbody id="user-body"></tbody>
 						</table>
 					</div>
-					<div class="column column-50">
+					<div data-intro='This table shows the currently queued videos. If you are trusted or owner you can rearrange and remove videos.' data-step=6 class="column column-50">
 						<input id="QueueName" type="text" style="margin-left: 3rem; width: 50%;" value="" placeholder="Your queue name.." />
 						<table class="table-right">
 							<thead>
@@ -120,6 +120,9 @@
 		<script src="jsm/Youtube.min.js"></script>
 		<script src="jsm/bigSlide.min.js"></script>
 		<script src="jsm/jquery-growl.min.js"></script>
+		<script src="jsm/intro.min.js"></script>
+		<script src="jsm/cookieManager.min.js"></script>
+		<script src="jsm/onboarding.min.js"></script>
 
         <!-- Start of StatCounter Code for Default Guide -->
         <script type="text/javascript">
@@ -151,6 +154,8 @@
 						Queue.sortQueue(data);
 					}
 				});
+
+				OnboardManager.beginOnboarding();
 			});
 		</script>
 
