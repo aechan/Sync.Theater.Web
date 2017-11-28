@@ -20,7 +20,7 @@ var User = {
         for (var i = 0; i < words.length; i++) {
             if (words[i].indexOf("@") == 0) {
                 if (words[i].substring(1).toUpperCase() === this.Nickname.toUpperCase()) {
-                    $.growl({ title: "@"+sender, message: message, style: "notice" });
+                    $.growl({ title: "@"+sender, message: message, style: "warning", location: "tc"  });
                 }
             }
         }

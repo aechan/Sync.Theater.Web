@@ -4,18 +4,22 @@
         var align = '';
         var self = (sender.toUpperCase() === User.Nickname.toUpperCase());
         if (self) {
-            align = 'right-in';
+            align = 'my-chat';
         }
         else {
-            align = 'left-in';
+            align = 'your-chat';
             User.parseMessageForAt(message, sender);
         }
         $("#chatArea").append('\
-            <div class="talk-bubble tri-right">\
-				<div class="talktext" >\
-					<p>'+sender+': '+message+'</p>\
-				</div>\
-			</div>');
+            <div class="wordwrap talk-bubble '+align+'">\
+					<a href="#at" username="'+sender+'"class="sender">'+sender+'</a>: <span style="color: white">'+message+'</span>\
+            </div>');
+            $("a.sender").click(function (e){
+                
+                $("#messageBox").val("@"+$(this).attr("username")+" ");
+                $("#messageBox").focus();
+                return false;
+            });
         
     },
 

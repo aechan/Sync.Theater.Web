@@ -10,7 +10,7 @@
 		<link rel="stylesheet" href="lib/normalize.css/normalize.css" />
 		<link rel="stylesheet" href="lib/milligram/milligram.min.css" />
 		<link rel="stylesheet" href="cssm/main.min.css" />
-		<link href="http://vjs.zencdn.net/6.2.5/video-js.css" rel="stylesheet">
+		<link href="cssm/video-js.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="cssm/sync-theater.min.css" />
 		<link rel="stylesheet" href="cssm/chat-bubbles.min.css" />
 		<link rel="stylesheet" href="cssm/jquery-growl.min.css" />
@@ -44,11 +44,13 @@
 
 					</div>
 					<div class="row">
-						<video id="video" class="video-js vjs-default-skin vjs-big-play-centered"
-								controls
-								preload="auto"
-								autoplay
-								data-setup='{ "fluid": true, techOrder["html5", "youtube"] }'></video>
+						
+							<video id="video" class="video-js vjs-default-skin vjs-big-play-centered"
+									controls
+									preload="auto"
+									autoplay
+									data-setup='{ "fluid": true, techOrder["html5", "youtube"] }' 
+									></video>
 					</div>
 
 					<div class="row controls-margin-top" id="controls">
@@ -99,7 +101,6 @@
 				<section class="container">
 					<div class="row">
 						
-						<div class="column center-align"><p>This site is a beta and is not guaranteed to work correctly. For a more stable experience use the main site: <a href="http://sync.theater">sync.theater</a></p></div>
 					</div>
 				</section>
 			</footer>
@@ -109,7 +110,7 @@
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 		<script src="jsm/main.min.js"></script>
 		<script src="jsm/user.min.js"></script>
-		<script src="http://vjs.zencdn.net/6.2.5/video.js"></script>
+		<script src="http://vjs.zencdn.net/6.4.0/video.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.9.0/videojs-contrib-hls.min.js"></script>
 		<script src="jsm/init.min.js"></script>
 		<script src="jsm/permissions.min.js"></script>

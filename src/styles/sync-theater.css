@@ -359,8 +359,8 @@ div.heart {
 
 
 #chatArea {
-	height: 92vh;
-
+	height: 88vh;
+	overflow-y: auto;
 	width: 100%;
 }
 
@@ -396,6 +396,15 @@ div.heart {
 	background-color: rgba(255,255,255,0.2);
 	
 }
+.videocontent {
+	margin:0 auto;
+	display: flex;
+	flex-wrap: nowrap;
+	text-align: right;
+	justify-content: space-between;
+  }
+
+
 
 .hearts {
 	pointer-events: none;
@@ -413,4 +422,14 @@ div.heart {
 
 #chatContainer{
 	position: absolute;
+}
+
+
+#chatArea::-webkit-scrollbar {
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;  /* optional: just make scrollbar invisible */
+}
+
+#chatArea::-webkit-scrollbar-thumb {
+	background-color: transparent;
 }

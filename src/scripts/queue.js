@@ -42,7 +42,7 @@
         for (key in this.currentQueue.URLItems) {
             $("#queue-body").append('<tr id="' + key +'">\
                 <td>  <i class="fa fa-bars"></i></td>\
-                <td><a href="#play" id='+ key + '_play' +'> <i class="fa fa-play-circle" aria-hidden="true"></i> -- '+ Queue.currentQueue.URLItems[key].URL.substr(0,60)+'...' +'</a></td>\
+                <td><a href="#play" id='+ key + '_play' +'> <i class="fa fa-play-circle" aria-hidden="true"></i> '+ Queue.currentQueue.URLItems[key].URL.substr(0,60)+'...' +'</a></td>\
                 <td><a id="'+ key + '_remove' +'" href="#remove"><i class="fa fa-times"></i></a></td>\
 				</tr >');
 
