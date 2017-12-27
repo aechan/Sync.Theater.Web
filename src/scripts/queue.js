@@ -166,7 +166,7 @@
             });
             video.play();
             SocketCommandManager.syncQueue(Queue.queueToJSON());
-        } else if (~this.currentQueue.URLItems[key].URL.indexOf(".webm")) {
+        } else if (~this.currentQueue.URLItems[key].URL.indexOf(".webm") || ~this.currentQueue.URLItems[key].indexOf("drive.google.com")) {
             video.src({
                 type: "video/webm",
                 src: Queue.currentQueue.URLItems[key].URL
