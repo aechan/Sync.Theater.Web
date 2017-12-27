@@ -113,7 +113,7 @@ input[type="text"]{
 }
 
 .selfNickname {
-	color: #FFC107;
+	color: #FFC107 !important;
 }
 
 .whitecolor {

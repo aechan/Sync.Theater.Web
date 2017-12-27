@@ -71,12 +71,17 @@ var UserTable = {
 
             } else {
                 $("#user-body").append('<tr>\
-                <td class="selfNickname">'+ userListJSON.Userlist[i].Nickname + '</td>\
+                <td><input id="user-self" class="selfNickname" type="text" value="'+ userListJSON.Userlist[i].Nickname + '"></input></td>\
                 <td> '+ status(userListJSON.Userlist[i].Status) +'</td>\
                 <td>'+ levelString(userListJSON.Userlist[i].PermissionLevel) + '</td>\
                 <td></td>\</tr>');
-
+                
                 //add <a> event handlers
+                $("#user-self").keypress(function (e) {
+                    if (e.which == 13) {
+                        SocketCommandManager.sendUsernameUpdate($("#user-self").val());
+                    }
+                });
             }
         }
     }

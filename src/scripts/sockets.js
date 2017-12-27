@@ -121,6 +121,13 @@ var SocketCommandManager = {
             CommandType: CommandType.UPDATESTATUS,
             Status: status
         }));
+    },
+
+    sendUsernameUpdate: function (newNick) {
+        socket.send(JSON.stringify({
+            CommandType: CommandType.UPDATEUSERNAME,
+            Nickname: newNick
+        }));
     }
 };
 
@@ -189,6 +196,7 @@ $("#users-link").click(function (e) {
     }, 2000);
     return false;
 });
+
 var CommandType = {
         // User management commands
     REGISTERUSER: "REGISTERUSER",
@@ -213,5 +221,6 @@ var CommandType = {
     UPDATELIKES: "UPDATELIKES",
     CHAT: "CHAT",
     KICKUSER: "KICKUSER",
-    UPDATESTATUS: "UPDATESTATUS"
+    UPDATESTATUS: "UPDATESTATUS",
+    UPDATEUSERNAME: "UPDATEUSERNAME"
 };
