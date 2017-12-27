@@ -14,12 +14,13 @@
             <div class="wordwrap talk-bubble '+align+'">\
 					<a href="#at" username="'+sender+'"class="sender">'+sender+'</a>: <span style="color: white">'+message+'</span>\
             </div>');
-            $("a.sender").click(function (e){
-                
-                $("#messageBox").val("@"+$(this).attr("username")+" ");
-                $("#messageBox").focus();
-                return false;
-            });
+        $("a.sender").click(function (e){
+            
+            $("#messageBox").val("@"+$(this).attr("username")+" ");
+            $("#messageBox").focus();
+            return false;
+        });
+        $('#chatArea').scrollTop($('#chatArea')[0].scrollHeight);
         
     },
 
