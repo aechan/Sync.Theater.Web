@@ -12,7 +12,7 @@
         }
         $("#chatArea").append('\
             <div class="wordwrap talk-bubble '+align+'">\
-					<a href="#at" username="'+sender+'"class="sender">'+sender+'</a>: <span style="color: white">'+message+'</span>\
+					<a href="#at" username="'+sender+'"class="sender">'+sender+'</a>: <span style="color: white">'+this.parseImagesFromMessage(message)+'</span>\
             </div>');
         $("a.sender").click(function (e){
             
@@ -26,6 +26,13 @@
 
     sendChat: function (message) {
         SocketCommandManager.sendChat(message, User.Nickname);
+    },
+
+    parseImagesFromMessage: function (message) {
+        var isImgUrl= /https?:\/\/.*?\.(?:png|jpg|jpeg|gif)/ig;
+
+        var newmsg = message.replace(isImgUrl, '<img src="$&"/>');
+        return newmsg;
     }
 
 };
